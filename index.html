@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🤖 Bot Inteligente WhatsApp - ¡Automatiza YA!</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+        body { font-family: 'Poppins', sans-serif; overflow-x: hidden; }
+        
+        .gradient-bg { 
+            background: linear-gradient(-45deg, #667eea, #764ba2, #f093fb, #f5576c, #4facfe, #00f2fe);
+            background-size: 400% 400%;
+            animation: gradientShift 8s ease infinite;
+        }
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .floating { animation: floating 6s ease-in-out infinite; }
+        @keyframes floating {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            33% { transform: translateY(-20px) rotate(2deg); }
+            66% { transform: translateY(-10px) rotate(-1deg); }
+        }
+        
+        .pulse-glow { 
+            animation: pulseGlow 2s infinite;
+            box-shadow: 0 0 20px rgba(37, 211, 102, 0.5);
+        }
+        @keyframes pulseGlow {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 20px rgba(37, 211, 102, 0.5); }
+            50% { transform: scale(1.05); box-shadow: 0 0 30px rgba(37, 211, 102, 0.8); }
+        }
+        
+        .bounce-in { animation: bounceIn 1s ease-out; }
+        @keyframes bounceIn {
+            0% { opacity: 0; transform: scale(0.3) translateY(100px); }
+            50% { opacity: 1; transform: scale(1.1) translateY(-10px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        
+        .slide-in-left { animation: slideInLeft 1s ease-out; }
+        @keyframes slideInLeft {
+            0% { opacity: 0; transform: translateX(-100px); }
+            100% { opacity: 1; transform: translateX(0); }
+        }
+        
+        .slide-in-right { animation: slideInRight 1s ease-out; }
+        @keyframes slideInRight {
+            0% { opacity: 0; transform: translateX(100px); }
+            100% { opacity: 1; transform: translateX(0); }
+        }
+        
+        .typing-animation { animation: typing 1.5s infinite; }
+        @keyframes typing {
+            0%, 60%, 100% { opacity: 0.3; }
+            30% { opacity: 1; }
+        }
+        
+        .neon-text {
+            text-shadow: 0 0 10px #00ff88, 0 0 20px #00ff88, 0 0 30px #00ff88;
+            animation: neonFlicker 3s infinite alternate;
+        }
+        @keyframes neonFlicker {
+            0%, 100% { text-shadow: 0 0 10px #00ff88, 0 0 20px #00ff88, 0 0 30px #00ff88; }
+            50% { text-shadow: 0 0 5px #00ff88, 0 0 10px #00ff88, 0 0 15px #00ff88; }
+        }
+        
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            animation: particleFloat 8s infinite linear;
+        }
+        @keyframes particleFloat {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
+        }
+        
+        .shake { animation: shake 0.5s infinite; }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        
+        .zoom-hover:hover { transform: scale(1.1); transition: all 0.3s ease; }
+        
+        .countdown-urgency {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            animation: urgencyPulse 1s infinite;
+        }
+        @keyframes urgencyPulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(238, 90, 36, 0.7); }
+            50% { box-shadow: 0 0 0 10px rgba(238, 90, 36, 0); }
+        }
+        
+        .chat-bubble-appear { animation: chatBubbleAppear 0.6s ease-out; }
+        @keyframes chatBubbleAppear {
+            0% { opacity: 0; transform: translateY(20px) scale(0.8); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        
+        .money-rain { animation: moneyRain 3s infinite linear; }
+        @keyframes moneyRain {
+            0% { transform: translateY(-100px) rotate(0deg); }
+            100% { transform: translateY(100vh) rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-black text-white relative">
+    
+    <!-- Particles Background -->
+    <div id="particles-container" class="fixed inset-0 pointer-events-none z-0"></div>
+    
+    <!-- Money Rain -->
+    <div id="money-rain" class="fixed inset-0 pointer-events-none z-10"></div>
+    
+    <!-- Header -->
+    <header class="gradient-bg min-h-screen flex items-center justify-center relative z-20 overflow-hidden">
+        <div class="container mx-auto px-6 text-center relative">
+            
+            <!-- Floating Elements -->
+            <div class="absolute top-10 left-10 floating">
+                <div class="text-6xl">💰</div>
+            </div>
+            <div class="absolute top-20 right-20 floating" style="animation-delay: 1s;">
+                <div class="text-5xl">🚀</div>
+            </div>
+            <div class="absolute bottom-20 left-20 floating" style="animation-delay: 2s;">
+                <div class="text-4xl">⚡</div>
+            </div>
+            
+            <!-- Countdown Timer -->
+            <div class="countdown-urgency text-white px-6 py-3 rounded-full inline-block mb-8 font-bold shake">
+                <span class="text-lg">🔥 OFERTA TERMINA EN: </span>
+                <span id="countdown" class="text-xl neon-text">23:59:45</span>
+            </div>
+            
+            <!-- Animated Bot Chat -->
+            <div class="floating mb-12 bounce-in">
+                <div class="max-w-md mx-auto bg-white/10 backdrop-blur-lg rounded-3xl p-6 border border-white/20 shadow-2xl">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center mr-3 pulse-glow">
+                            <i class="fab fa-whatsapp text-white text-xl"></i>
+                        </div>
+                        <div class="text-left">
+                            <div class="font-bold text-white">🤖 Bot Súper Inteligente</div>
+                            <div class="text-sm text-green-400 flex items-center">
+                                <span class="w-2 h-2 bg-green-400 rounded-full mr-2 pulse-glow"></span>
+                                ¡Trabajando 24/7!
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="dynamic-chat" class="space-y-3 h-32 overflow-hidden">
+                        <!-- Chat messages will be inserted here -->
+                    </div>
+                    
+                    <div id="typing-indicator" class="flex items-center mt-3 opacity-0">
+                        <div class="flex space-x-1">
+                            <div class="w-2 h-2 bg-green-400 rounded-full typing-animation"></div>
+                            <div class="w-2 h-2 bg-green-400 rounded-full typing-animation" style="animation-delay: 0.2s"></div>
+                            <div class="w-2 h-2 bg-green-400 rounded-full typing-animation" style="animation-delay: 0.4s"></div>
+                        </div>
+                        <span class="text-xs text-green-400 ml-2">escribiendo respuesta inteligente...</span>
+                    </div>
+                </div>
+            </div>
+
+            <h1 class="text-7xl font-black mb-6 neon-text bounce-in" style="animation-delay: 0.5s;">
+                🤖 BOT INTELIGENTE
+            </h1>
+            <h2 class="text-4xl font-bold mb-8 slide-in-left" style="animation-delay: 1s;">
+                ¡Automatiza tus ventas por WhatsApp!
+            </h2>
+            <p class="text-2xl mb-12 max-w-3xl mx-auto slide-in-right" style="animation-delay: 1.5s;">
+                🚀 Atiende clientes 24/7 • 💰 Aumenta ventas 300% • ⚡ Sin perder ni un pedido
+            </p>
+            
+            <!-- Urgency Banner -->
+            <div class="bg-red-600 text-white px-8 py-4 rounded-full inline-block mb-8 pulse-glow font-bold text-xl">
+                🔥 ¡SOLO HOY! 33% DESCUENTO - AHORRA $500.000 🔥
+            </div>
+            
+            <!-- CTA Buttons -->
+            <div class="flex flex-col sm:flex-row gap-6 justify-center bounce-in" style="animation-delay: 2s;">
+                <button onclick="contactWhatsApp()" class="bg-green-500 hover:bg-green-400 text-white px-12 py-6 rounded-2xl font-bold text-2xl pulse-glow zoom-hover transform transition-all duration-300">
+                    <i class="fab fa-whatsapp mr-3 text-3xl"></i>
+                    ¡QUIERO MI BOT YA!
+                </button>
+                <button onclick="scrollToDemo()" class="bg-white/20 backdrop-blur-lg text-white px-8 py-6 rounded-2xl font-bold text-xl border-2 border-white/30 hover:bg-white/30 zoom-hover transition-all duration-300">
+                    <i class="fas fa-play mr-2"></i>
+                    Ver Demo Increíble
+                </button>
+            </div>
+            
+            <!-- Social Proof -->
+            <div class="mt-12 slide-in-left" style="animation-delay: 2.5s;">
+                <div class="flex justify-center space-x-8 text-4xl">
+                    <span class="floating">🍕</span>
+                    <span class="floating" style="animation-delay: 0.5s;">🍔</span>
+                    <span class="floating" style="animation-delay: 1s;">🛒</span>
+                    <span class="floating" style="animation-delay: 1.5s;">👕</span>
+                    <span class="floating" style="animation-delay: 2s;">💊</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Benefits Section -->
+    <section class="py-20 bg-gradient-to-r from-purple-900 via-blue-900 to-indigo-900 relative">
+        <div class="container mx-auto px-6">
+            <h2 class="text-6xl font-black text-center mb-16 neon-text">
+                🚀 ¡RESULTADOS INCREÍBLES!
+            </h2>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="text-center p-8 bg-white/10 backdrop-blur-lg rounded-3xl border border-white/20 zoom-hover slide-in-left">
+                    <div class="text-6xl mb-4 floating">🕐</div>
+                    <h3 class="text-2xl font-bold mb-2 text-yellow-400">24/7 ACTIVO</h3>
+                    <p class="text-lg">¡Nunca más pierdas un cliente!</p>
+                </div>
+                
+                <div class="text-center p-8 bg-white/10 backdrop-blur-lg rounded-3xl border border-white/20 zoom-hover slide-in-right" style="animation-delay: 0.2s;">
+                    <div class="text-6xl mb-4 floating" style="animation-delay: 1s;">📈</div>
+                    <h3 class="text-2xl font-bold mb-2 text-green-400">+300% VENTAS</h3>
+                    <p class="text-lg">Triplica tus ingresos automáticamente</p>
+                </div>
+                
+                <div class="text-center p-8 bg-white/10 backdrop-blur-lg rounded-3xl border border-white/20 zoom-hover slide-in-left" style="animation-delay: 0.4s;">
+                    <div class="text-6xl mb-4 floating" style="animation-delay: 2s;">⚡</div>
+                    <h3 class="text-2xl font-bold mb-2 text-blue-400">RESPUESTA INMEDIATA</h3>
+                    <p class="text-lg">Clientes felices = más dinero</p>
+                </div>
+                
+                <div class="text-center p-8 bg-white/10 backdrop-blur-lg rounded-3xl border border-white/20 zoom-hover slide-in-right" style="animation-delay: 0.6s;">
+                    <div class="text-6xl mb-4 floating" style="animation-delay: 3s;">💰</div>
+                    <h3 class="text-2xl font-bold mb-2 text-red-400">AHORRA TIEMPO</h3>
+                    <p class="text-lg">Enfócate en hacer crecer tu negocio</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Demo Section -->
+    <section id="demo" class="py-20 bg-black relative">
+        <div class="container mx-auto px-6">
+            <h2 class="text-6xl font-black text-center mb-16 neon-text">
+                📱 ¡MIRA ESTA MAGIA!
+            </h2>
+            
+            <div class="max-w-lg mx-auto">
+                <div class="bg-gradient-to-br from-green-400 to-blue-500 p-1 rounded-3xl">
+                    <div class="bg-black rounded-3xl overflow-hidden">
+                        <div class="bg-green-500 text-white p-6 flex items-center">
+                            <i class="fab fa-whatsapp text-3xl mr-4 pulse-glow"></i>
+                            <div>
+                                <div class="font-bold text-xl">Tu Negocio Bot 🤖</div>
+                                <div class="text-sm opacity-90">Generando dinero...</div>
+                            </div>
+                        </div>
+                        
+                        <div id="demo-chat" class="p-6 space-y-4 h-96 overflow-y-auto bg-gray-900">
+                            <!-- Demo messages will be inserted here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Commercial Value Section -->
+    <section class="py-20 bg-gradient-to-r from-red-900 via-orange-900 to-yellow-900 relative">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-5xl font-black mb-12 neon-text">
+                💎 VALOR COMERCIAL REAL
+            </h2>
+            
+            <div class="max-w-4xl mx-auto">
+                <div class="bg-white/10 backdrop-blur-lg rounded-3xl p-8 border border-white/20 mb-12">
+                    <div class="grid md:grid-cols-2 gap-8 items-center">
+                        <div class="text-left">
+                            <h3 class="text-3xl font-bold mb-6 text-yellow-400">🏆 Lo que realmente vale:</h3>
+                            <div class="space-y-4">
+                                <div class="flex items-center">
+                                    <span class="text-2xl mr-3">🤖</span>
+                                    <span class="text-lg">Bot con IA avanzada: <strong class="text-green-400">$2.000.000</strong></span>
+                                </div>
+                                <div class="flex items-center">
+                                    <span class="text-2xl mr-3">⚙️</span>
+                                    <span class="text-lg">Integración personalizada: <strong class="text-green-400">$1.500.000</strong></span>
+                                </div>
+                                <div class="flex items-center">
+                                    <span class="text-2xl mr-3">🛠️</span>
+                                    <span class="text-lg">Configuración completa: <strong class="text-green-400">$1.000.000</strong></span>
+                                </div>
+                                <div class="flex items-center">
+                                    <span class="text-2xl mr-3">📞</span>
+                                    <span class="text-lg">Soporte técnico: <strong class="text-green-400">$1.500.000</strong></span>
+                                </div>
+                            </div>
+                            <div class="border-t border-white/20 mt-6 pt-6">
+                                <div class="text-2xl font-bold text-red-400">
+                                    VALOR TOTAL: <span class="text-4xl text-red-300">$6.000.000</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="text-center">
+                            <div class="bg-gradient-to-br from-yellow-400 to-orange-500 rounded-3xl p-8 text-black">
+                                <h4 class="text-2xl font-black mb-4">🚀 PRECIO DE LANZAMIENTO</h4>
+                                <div class="text-5xl font-black mb-4">$1.500.000</div>
+                                <p class="text-lg font-bold mb-6">¡AHORRAS $4.500.000!</p>
+                                
+                                <div class="bg-green-600 text-white rounded-2xl p-4 mb-4">
+                                    <p class="font-bold text-lg">🎯 OFERTA ESPECIAL</p>
+                                    <p class="text-sm">Con contrato de 6 meses:</p>
+                                    <div class="text-3xl font-black">$1.000.000</div>
+                                </div>
+                                
+                                <p class="text-sm font-bold">⚡ Solo por tiempo limitado ⚡</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="py-20 gradient-bg relative">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-6xl font-black mb-8 neon-text">
+                💸 ¡PRECIO LOCO POR TIEMPO LIMITADO!
+            </h2>
+            
+            <!-- Urgency Timer -->
+            <div class="countdown-urgency text-white px-8 py-4 rounded-full inline-block mb-12 font-bold text-2xl shake">
+                ⏰ QUEDAN SOLO <span id="countdown2" class="neon-text">23:59:45</span> ⏰
+            </div>
+            
+            <div class="max-w-md mx-auto bounce-in">
+                <div class="bg-white/10 backdrop-blur-lg rounded-3xl p-8 border-4 border-yellow-400 relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-yellow-400 to-red-500"></div>
+                    
+                    <div class="text-center">
+                        <h3 class="text-3xl font-black mb-6 text-yellow-400">🔥 OFERTA EXPLOSIVA 🔥</h3>
+                        
+                        <div class="mb-6">
+                            <span class="text-2xl line-through text-red-400">$1.500.000</span>
+                            <div class="text-6xl font-black text-green-400 neon-text">$1.000.000</div>
+                            <p class="text-xl text-yellow-300 font-bold">¡AHORRAS $500.000!</p>
+                        </div>
+                        
+                        <div class="bg-green-500/20 rounded-2xl p-4 mb-6">
+                            <p class="text-lg font-bold">✅ TODO INCLUIDO - PAGO ÚNICO</p>
+                            <p class="text-sm">Bot completo + IA + Integración + Soporte</p>
+                        </div>
+                        
+                        <button onclick="contactWhatsApp()" class="w-full bg-green-500 hover:bg-green-400 text-white py-6 rounded-2xl font-black text-2xl pulse-glow zoom-hover mb-4">
+                            <i class="fab fa-whatsapp mr-3"></i>
+                            ¡LO QUIERO AHORA!
+                        </button>
+                        
+                        <p class="text-sm text-yellow-300">⚡ Instalación en 24 horas ⚡</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Monthly Plans -->
+            <div class="mt-16">
+                <h3 class="text-4xl font-bold mb-8 text-yellow-400">📦 Planes de Mantenimiento</h3>
+                <div class="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+                    
+                    <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20 zoom-hover">
+                        <h4 class="text-xl font-bold mb-4 text-blue-400">Básico</h4>
+                        <div class="text-3xl font-bold mb-4">$150.000<span class="text-sm">/mes</span></div>
+                        <button onclick="contactWhatsApp()" class="w-full bg-blue-500 text-white py-3 rounded-lg font-bold hover:bg-blue-400">
+                            Elegir Plan
+                        </button>
+                    </div>
+                    
+                    <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border-2 border-green-400 zoom-hover relative">
+                        <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-4 py-1 rounded-full text-sm font-bold pulse-glow">
+                            🔥 MÁS POPULAR
+                        </div>
+                        <h4 class="text-xl font-bold mb-4 text-green-400">Intermedio</h4>
+                        <div class="text-3xl font-bold mb-4 text-green-400">$300.000<span class="text-sm">/mes</span></div>
+                        <button onclick="contactWhatsApp()" class="w-full bg-green-500 text-white py-3 rounded-lg font-bold hover:bg-green-400 pulse-glow">
+                            ¡ELEGIR ESTE!
+                        </button>
+                    </div>
+                    
+                    <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20 zoom-hover">
+                        <h4 class="text-xl font-bold mb-4 text-purple-400">Premium</h4>
+                        <div class="text-3xl font-bold mb-4">$500.000+<span class="text-sm">/mes</span></div>
+                        <button onclick="contactWhatsApp()" class="w-full bg-purple-500 text-white py-3 rounded-lg font-bold hover:bg-purple-400">
+                            Elegir Plan
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="py-20 bg-black text-center relative">
+        <div class="container mx-auto px-6">
+            <h2 class="text-6xl font-black mb-8 neon-text">
+                🚨 ¡ÚLTIMA OPORTUNIDAD! 🚨
+            </h2>
+            <p class="text-2xl mb-12 max-w-3xl mx-auto">
+                No dejes que tus competidores se adelanten. ¡Automatiza YA y domina tu mercado!
+            </p>
+            
+            <div class="flex flex-col sm:flex-row gap-6 justify-center">
+                <button onclick="contactWhatsApp()" class="bg-green-500 hover:bg-green-400 text-white px-16 py-8 rounded-3xl font-black text-3xl pulse-glow zoom-hover shake">
+                    <i class="fab fa-whatsapp mr-4 text-4xl"></i>
+                    ¡CONTRATAR AHORA!
+                </button>
+            </div>
+            
+            <p class="text-lg mt-8 text-yellow-400 font-bold">
+                ⚡ Respuesta inmediata por WhatsApp ⚡
+            </p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-8 bg-gray-900 text-center">
+        <p class="text-gray-400">© 2024 Bot Inteligente WhatsApp - Revoluciona tu negocio</p>
+    </footer>
+
+    <script>
+        // Countdown Timer
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            tomorrow.setHours(0, 0, 0, 0);
+            const distance = tomorrow - now;
+            
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            
+            const timeString = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            document.getElementById('countdown').textContent = timeString;
+            document.getElementById('countdown2').textContent = timeString;
+        }
+        
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        // Particles
+        function createParticle() {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * 100 + 'vw';
+            particle.style.width = particle.style.height = Math.random() * 4 + 2 + 'px';
+            particle.style.animationDuration = Math.random() * 3 + 5 + 's';
+            particle.style.animationDelay = Math.random() * 2 + 's';
+            document.getElementById('particles-container').appendChild(particle);
+            
+            setTimeout(() => particle.remove(), 8000);
+        }
+        
+        setInterval(createParticle, 300);
+
+        // Money Rain
+        function createMoney() {
+            const money = document.createElement('div');
+            money.innerHTML = '💰';
+            money.className = 'money-rain absolute text-2xl';
+            money.style.left = Math.random() * 100 + 'vw';
+            money.style.animationDuration = Math.random() * 2 + 3 + 's';
+            document.getElementById('money-rain').appendChild(money);
+            
+            setTimeout(() => money.remove(), 5000);
+        }
+        
+        setInterval(createMoney, 2000);
+
+        // Dynamic Chat
+        const chatMessages = [
+            { user: "Hola! Necesito hacer un pedido urgente", isBot: false },
+            { user: "¡Perfecto! 🚀 Te ayudo inmediatamente. ¿Qué necesitas?", isBot: true },
+            { user: "2 pizzas grandes y 4 gaseosas", isBot: false },
+            { user: "¡Excelente! 🍕🥤 Total: $58.000. ¿Tu dirección?", isBot: true },
+            { user: "Calle 123 #45-67", isBot: false },
+            { user: "¡Listo! Llega en 30 min. Gracias por elegir nuestro bot 🤖✨", isBot: true }
+        ];
+        
+        const demoMessages = [
+            { user: "¿Tienen promociones hoy?", isBot: false },
+            { user: "¡Sí! 🔥 2x1 en hamburguesas hasta las 8pm", isBot: true },
+            { user: "Perfecto! Quiero 2 hamburguesas", isBot: false },
+            { user: "¡Genial! 🍔 Con la promo pagas solo $25.000. ¿Algo más?", isBot: true }
+        ];
+
+        let chatIndex = 0;
+        let demoIndex = 0;
+
+        function addChatMessage() {
+            const container = document.getElementById('dynamic-chat');
+            const message = chatMessages[chatIndex % chatMessages.length];
+            
+            // Show typing
+            document.getElementById('typing-indicator').style.opacity = '1';
+            
+            setTimeout(() => {
+                document.getElementById('typing-indicator').style.opacity = '0';
+                
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `chat-bubble-appear ${message.isBot ? 'bg-green-500/20 border-l-4 border-green-400' : 'bg-white/10'} rounded-lg p-3 mb-2`;
+                messageDiv.innerHTML = `<p class="text-sm ${message.isBot ? 'text-green-300' : 'text-white'}">${message.user}</p>`;
+                
+                container.appendChild(messageDiv);
+                
+                if (container.children.length > 3) {
+                    container.removeChild(container.firstChild);
+                }
+                
+                chatIndex++;
+            }, 1500);
+        }
+
+        function addDemoMessage() {
+            const container = document.getElementById('demo-chat');
+            const message = demoMessages[demoIndex % demoMessages.length];
+            
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `flex ${message.isBot ? 'justify-start' : 'justify-end'} chat-bubble-appear`;
+            messageDiv.innerHTML = `
+                <div class="${message.isBot ? 'bg-green-500' : 'bg-gray-700'} text-white rounded-2xl px-4 py-2 max-w-xs">
+                    <p class="text-sm">${message.user}</p>
+                </div>
+            `;
+            
+            container.appendChild(messageDiv);
+            container.scrollTop = container.scrollHeight;
+            
+            if (container.children.length > 6) {
+                container.removeChild(container.firstChild);
+            }
+            
+            demoIndex++;
+        }
+
+        // Start animations
+        setInterval(addChatMessage, 4000);
+        setInterval(addDemoMessage, 3000);
+        
+        // Initial messages
+        setTimeout(addChatMessage, 1000);
+        setTimeout(addDemoMessage, 500);
+
+        function scrollToDemo() {
+            document.getElementById('demo').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function contactWhatsApp() {
+            window.open('https://wa.link/7e4oiu', '_blank');
+        }
+
+        // Scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animationPlayState = 'running';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.slide-in-left, .slide-in-right, .bounce-in').forEach(el => {
+            el.style.animationPlayState = 'paused';
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
